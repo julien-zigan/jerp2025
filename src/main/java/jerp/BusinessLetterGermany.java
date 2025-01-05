@@ -2,9 +2,9 @@ package jerp;
 
 import java.io.File;
 
+
 public class BusinessLetterGermany {
     private Object letterhead;
-
 
     public Object getLetterhead() {
         return letterhead;
@@ -15,10 +15,16 @@ public class BusinessLetterGermany {
     }
 
 
+    public File saveAsPDF(String filename, String directoryPath) {
 
-    public File toPDF() {
+        boolean needsFileExtension =
+                !(filename.trim().toLowerCase().endsWith(".pdf"));
+        if (needsFileExtension) {
+            filename = filename + ".pdf";
+        }
 
-        return new File("Maketestgreen.pdf");
+        String fullyQualifiedPath = directoryPath + File.separator + filename;
+
+        return null;
     }
 }
-

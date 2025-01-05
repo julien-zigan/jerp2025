@@ -14,6 +14,7 @@ class BusinessLetterGermanyTest {
         BusinessLetterGermany letter = new BusinessLetterGermany();
 
         File letterPDF = letter.toPDF();
+
         assertNotNull(letterPDF);
     }
 }
