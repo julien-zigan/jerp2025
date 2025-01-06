@@ -2,10 +2,17 @@ package jerp;
 
 import java.io.File;
 
-
-public class BusinessLetterGermany {
+public class BusinessLetterDIN5008 {
+    private Layout layout;
     private Object letterhead;
 
+    public Layout getLayout() {
+        return layout;
+    }
+
+    public void setLayout(Layout layout) {
+        this.layout = layout;
+    }
     public Object getLetterhead() {
         return letterhead;
     }
@@ -14,17 +21,20 @@ public class BusinessLetterGermany {
         this.letterhead = letterhead;
     }
 
+    public File saveAsPDF(String path) {
+        path = addFileExtension(path);
 
-    public File saveAsPDF(String filename, String directoryPath) {
+        return new File(path);
+    }
 
+    private String addFileExtension(String filename) {
         boolean needsFileExtension =
                 !(filename.trim().toLowerCase().endsWith(".pdf"));
         if (needsFileExtension) {
             filename = filename + ".pdf";
         }
-
-        String fullyQualifiedPath = directoryPath + File.separator + filename;
-
-        return null;
+        return filename;
     }
+
+
 }
