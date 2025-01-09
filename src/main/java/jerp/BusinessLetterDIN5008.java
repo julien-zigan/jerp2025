@@ -22,19 +22,8 @@ public class BusinessLetterDIN5008 {
     }
 
     public File saveAsPDF(String path) {
-        path = addFileExtension(path);
 
         return new File(path);
     }
-
-    private String addFileExtension(String filename) {
-        boolean needsFileExtension =
-                !(filename.trim().toLowerCase().endsWith(".pdf"));
-        if (needsFileExtension) {
-            filename = filename + ".pdf";
-        }
-        return filename;
-    }
-
 
 }
