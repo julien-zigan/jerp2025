@@ -1,6 +1,7 @@
 package jerp;
 
 import java.io.File;
+import java.io.IOException;
 
 public class BusinessLetterDIN5008 {
     private Layout layout;
@@ -13,6 +14,7 @@ public class BusinessLetterDIN5008 {
     public void setLayout(Layout layout) {
         this.layout = layout;
     }
+
     public Object getLetterhead() {
         return letterhead;
     }
@@ -21,9 +23,10 @@ public class BusinessLetterDIN5008 {
         this.letterhead = letterhead;
     }
 
-    public File saveAsPDF(String path) {
 
-        return new File(path);
+
+    public File saveAsPDF(String path) throws IOException {
+        return PDFCreator.createFrom(this, path);
     }
 
 }
