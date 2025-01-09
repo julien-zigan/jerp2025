@@ -29,7 +29,7 @@ class BusinessLetterDIN5008Test {
 //    }
 
     @ParameterizedTest
-    @ValueSource(strings = {".pdf", "ABC.PDF", "Äüö.pDF", "pDFx.y.z.pdf", "pepe.pdf"})
+    @ValueSource(strings = {"0.pdf", "ABD.PDF", "Äüß.pDF", "pDFx.o.z.pdf", "pupe.pdf"})
     void shouldCreateFileWithGivenPath(String path) throws Exception {
         BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
 
@@ -41,7 +41,7 @@ class BusinessLetterDIN5008Test {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {" ", "CDE", "öüÄ", "w.x.y.", "pepepdf"})
+    @ValueSource(strings = {"  ", "CDEF", "öüÄi", "x-w.x.y.", "papepdf"})
     void shouldCreateFileAndAddFileExtension(String path) throws Exception {
         BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
 
