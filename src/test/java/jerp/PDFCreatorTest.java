@@ -51,4 +51,20 @@ class PDFCreatorTest {
 
         shouldBeFileWithGivenPath.deleteOnExit();
     }
+
+    @Test // Opens the PDFFile on the host system for visual proof
+    void shouldPrintLetterHead() throws Exception {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd_H.mm");
+        String dateExtension = LocalDateTime.now().format(formatter);
+        String path = "src\\test\\resources\\tmpTestOutput\\TestLetterhead_";
+        String fqn = path + dateExtension;
+
+        BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
+        Letterhead letterhead = new Letterhead(
+                "src/test/resources/mockLetterheads/lettehead_coffee.png");
+        letter.setLetterhead(letterhead);
+        File shouldHaveLetterHead = PDFCreator.createFrom(letter, fqn);
+
+        Desktop.getDesktop().open(shouldHaveLetterHead);
+    }
 }

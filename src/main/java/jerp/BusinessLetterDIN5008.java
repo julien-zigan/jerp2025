@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class BusinessLetterDIN5008 {
     private Layout layout;
-    private Object letterhead;
+    private Letterhead letterhead;
 
     public Layout getLayout() {
         return layout;
@@ -15,11 +15,11 @@ public class BusinessLetterDIN5008 {
         this.layout = layout;
     }
 
-    public Object getLetterhead() {
+    public Letterhead getLetterhead() {
         return letterhead;
     }
 
-    public void setLetterhead(Object letterhead) {
+    public void setLetterhead(Letterhead letterhead) {
         this.letterhead = letterhead;
     }
 

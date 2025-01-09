@@ -7,6 +7,8 @@ out/
 
 lib/
 
+src/test/resources/tmpTestOutput/
+
 ### IntelliJ IDEA ###
 .idea/*
 *.iws
