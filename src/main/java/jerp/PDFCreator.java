@@ -25,8 +25,11 @@ public class PDFCreator {
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                 if (letter.getLetterhead() != null) {
                     BufferedImage bufferedImage = letter.getLetterhead().getContent();
+                    int width = bufferedImage.getWidth();
+                    int height = bufferedImage.getHeight();
+                    double ratio = (double) width / height;
                     PDImageXObject image  = LosslessFactory.createFromImage(document, bufferedImage);
-                    contentStream.drawImage(image, 0, 0, 30, 20); // TODO: continue here
+                    contentStream.drawImage(image, 0, 0, 200, 500); // TODO: continue here
                 }
             }
 
