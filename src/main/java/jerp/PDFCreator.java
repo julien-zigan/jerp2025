@@ -4,7 +4,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.common.PDTypedDictionaryWrapper;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
@@ -23,13 +22,23 @@ public class PDFCreator {
             document.addPage(page);
 
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                Layout layout = letter.getLayout();
+
                 if (letter.getLetterhead() != null) {
                     BufferedImage bufferedImage = letter.getLetterhead().getContent();
-                    int width = bufferedImage.getWidth();
-                    int height = bufferedImage.getHeight();
-                    double ratio = (double) width / height;
+                    int originalWidth = bufferedImage.getWidth();
+                    int originalHeight = bufferedImage.getHeight();
+                    double ratio = (double) originalWidth / originalHeight;
+                    float computedHeight = layout.getLetterheadHeightInPoints();
+                    float computedWidth = (float) (computedHeight * ratio);
                     PDImageXObject image  = LosslessFactory.createFromImage(document, bufferedImage);
-                    contentStream.drawImage(image, 0, 0, 200, 500); // TODO: continue here
+                    contentStream.drawImage(
+                            image,
+                            layout.getLetterheadX(),
+                            layout.getLetterheadY(),
+                            computedWidth,
+                            computedHeight
+                    );
                 }
             }
 

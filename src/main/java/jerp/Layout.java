@@ -1,26 +1,47 @@
 package jerp;
 
 public class Layout {
-    private static final double DOCUMENT_WIDTH_IN_POINTS = 595.27563;
-    private static final double DOCUMENT_HEIGHT_IN_POINTS = 841.8898;
+    private static final float DOCUMENT_WIDTH_IN_POINTS = 595.27563F;
+    private static final float DOCUMENT_HEIGHT_IN_POINTS = 841.8898F;
 
-    private double letterhead_width_in_points;
-    private double letterhead_height_in_points;
+    private float letterheadX;
+    private float letterheadY;
+    private float letterheadWidthInPoints;
+    private float letterheadHeightInPoints;
 
-    private Layout(double letterhead_width_in_points,
-                   double letterhead_height_in_points) {
+    private Layout(float letterheadWidthInPoints,
+                   float letterheadHeightInPoints) {
 
+        this.letterheadX = 0;
+        this.letterheadY = DOCUMENT_HEIGHT_IN_POINTS - letterheadHeightInPoints;
+        this.letterheadWidthInPoints = letterheadWidthInPoints;
+        this.letterheadHeightInPoints = letterheadHeightInPoints;
     }
 
     public static Layout TypeA() {
         return new Layout(DOCUMENT_WIDTH_IN_POINTS,
-                76.5354);
+                76.5354F);
     }
 
     public static Layout TypeB() {
         return new Layout(DOCUMENT_WIDTH_IN_POINTS,
-                127.559);
+                127.559F);
     }
 
+    public float getLetterheadX() {
+        return letterheadX;
+    }
+
+    public float getLetterheadY() {
+        return letterheadY;
+    }
+
+    public float getLetterheadWidthInPoints() {
+        return letterheadWidthInPoints;
+    }
+
+    public float getLetterheadHeightInPoints() {
+        return letterheadHeightInPoints;
+    }
 
 }
