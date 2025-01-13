@@ -23,8 +23,6 @@ public class BusinessLetterDIN5008 {
         this.letterhead = letterhead;
     }
 
-
-
     public File saveAsPDF(String path) throws IOException {
         return PDFCreator.createFrom(this, path);
     }

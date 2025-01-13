@@ -9,9 +9,10 @@ public class Layout {
     private float letterheadWidthInPoints;
     private float letterheadHeightInPoints;
 
-    private Layout(float letterheadWidthInPoints,
-                   float letterheadHeightInPoints) {
-
+    private Layout(
+            float letterheadWidthInPoints,
+            float letterheadHeightInPoints
+    ) {
         this.letterheadX = 0;
         this.letterheadY = DOCUMENT_HEIGHT_IN_POINTS - letterheadHeightInPoints;
         this.letterheadWidthInPoints = letterheadWidthInPoints;
@@ -19,13 +20,17 @@ public class Layout {
     }
 
     public static Layout TypeA() {
-        return new Layout(DOCUMENT_WIDTH_IN_POINTS,
-                76.5354F);
+        return new Layout(
+                DOCUMENT_WIDTH_IN_POINTS,
+                76.5354F
+        );
     }
 
     public static Layout TypeB() {
-        return new Layout(DOCUMENT_WIDTH_IN_POINTS,
-                127.559F);
+        return new Layout(
+                DOCUMENT_WIDTH_IN_POINTS,
+                127.559F
+        );
     }
 
     public float getLetterheadX() {

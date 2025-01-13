@@ -11,8 +11,8 @@ import java.util.Objects;
 public class Letterhead {
     private final BufferedImage content;
 
-    // TODO: implement alignment (left, left-center, gticenter, right-center, right)
-    // TODO: push to github
+    // TODO: implement alignment (left, left-center, center, right-center, right)
+
 
     public Letterhead(String imagePath)
             throws IOException, IllegalArgumentException {
