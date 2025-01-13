@@ -11,9 +11,6 @@ import java.util.Objects;
 public class Letterhead {
     private final BufferedImage graphic;
 
-    // TODO: implement alignment (left, left-center, center, right-center, right)
-
-
     public Letterhead(String imagePath)
             throws IOException, IllegalArgumentException {
         File file = requirePNGorJPEG(new File(imagePath));
