@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static jerp.Layout.DOCUMENT_HEIGHT_IN_POINTS;
 import static jerp.Layout.DOCUMENT_WIDTH_IN_POINTS;
 
 public class PDFCreator {
@@ -30,13 +31,24 @@ public class PDFCreator {
                 if (letterhead != null) {
                     float height = layout.getLetterheadHeightInPoints();
                     float width = (float) (height * letterhead.getAspectRatio());
-                    // TODO: check if graphics width fits in
+                    float y = layout.getLetterheadY();
+
+                    // TODO: Extract
+                    if (width > DOCUMENT_WIDTH_IN_POINTS) {
+                        double resizingFactor = DOCUMENT_WIDTH_IN_POINTS / width;
+                        height *= (float) resizingFactor;
+                        width *= (float) resizingFactor;
+                        float heightDifference = DOCUMENT_HEIGHT_IN_POINTS
+                                - layout.getLetterheadY()
+                                - height;
+                        y += heightDifference / 2;
+                    }
 
                     float leftEnd = layout.getLetterheadX() - (width / 2);
                     float rightEnd = layout.getLetterheadX() + (width / 2);
                     float x = layout.getLetterheadX() - (width /2);
-
-                    if (x < DOCUMENT_WIDTH_IN_POINTS / 2) {
+                    /// Should take other branch
+                    if (layout.getLetterheadX() < DOCUMENT_WIDTH_IN_POINTS / 2) {
                         if (leftEnd < 0) {
                             x = 0F;
                         }
@@ -47,11 +59,12 @@ public class PDFCreator {
                     }
 
                     BufferedImage bufferedImage = letterhead.getGraphic();
-                    PDImageXObject image  = LosslessFactory.createFromImage(document, bufferedImage);
+                    PDImageXObject image  =
+                            LosslessFactory.createFromImage(document, bufferedImage);
                     contentStream.drawImage(
                             image,
                             x,
-                            layout.getLetterheadY(),
+                            y,
                             width,
                             height
                     );

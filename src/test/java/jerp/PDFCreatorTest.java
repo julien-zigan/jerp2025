@@ -86,7 +86,11 @@ class PDFCreatorTest {
     /// Opens File in PDFReader, comment out during regular tests
     @ParameterizedTest
     @ValueSource(strings = {
-            "left", "center-left", "center", "center-right", "right",
+            "left",
+            "center-left",
+            "center",
+            "center-right",
+            "right",
             "", "+ßÄÜö2§$%"
     })
     void shouldAlignLetterHead(String alignment) throws Exception {
@@ -97,11 +101,40 @@ class PDFCreatorTest {
         String fqn = path + dateExtension + uuid;
 
         BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
-        Layout layout = Layout.TypeA();
+        Layout layout = Layout.TypeB();
         layout.setLetterheadAlignment(alignment);
         letter.setLayout(layout);
         Letterhead letterhead = new Letterhead(
-                "src/test/resources/mockLetterheads/letterhead_wood.jpg");
+                "src/test/resources/mockLetterheads/letterhead_wood.png");
+        letter.setLetterhead(letterhead);
+        File shouldHaveLetterHead = PDFCreator.createFrom(letter, fqn);
+
+        Desktop.getDesktop().open(shouldHaveLetterHead);
+    }
+
+    /// Opens File in PDFReader, comment out during regular tests
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "left",
+            "center-left",
+            "center",
+            "center-right",
+            "right",
+            "", "+ßÄÜö2§$%"
+    })
+    void shouldAdjustHeightAndWidthLetterHead(String alignment) throws Exception {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd_H.mm");
+        String dateExtension = LocalDateTime.now().format(formatter);
+        String path = "src\\test\\resources\\tmpTestOutput\\TestLetterheadAlignment_";
+        UUID uuid = UUID.randomUUID();
+        String fqn = path + dateExtension + uuid;
+
+        BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
+        Layout layout = Layout.TypeB();
+        layout.setLetterheadAlignment(alignment);
+        letter.setLayout(layout);
+        Letterhead letterhead = new Letterhead(
+                "src/test/resources/mockLetterheads/letterhead_ultrawide.jpg");
         letter.setLetterhead(letterhead);
         File shouldHaveLetterHead = PDFCreator.createFrom(letter, fqn);
 
