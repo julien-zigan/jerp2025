@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 public class Letterhead {
-    private final BufferedImage content;
+    private final BufferedImage graphic;
 
     // TODO: implement alignment (left, left-center, center, right-center, right)
 
@@ -17,11 +17,23 @@ public class Letterhead {
     public Letterhead(String imagePath)
             throws IOException, IllegalArgumentException {
         File file = requirePNGorJPEG(new File(imagePath));
-        content = ImageIO.read(file);
+        graphic = ImageIO.read(file);
     }
 
-    public BufferedImage getContent() {
-        return content;
+    public BufferedImage getGraphic() {
+        return graphic;
+    }
+
+    public int getWidth() {
+        return graphic.getWidth();
+    }
+
+    public int getHeight() {
+        return graphic.getHeight();
+    }
+
+    public double getAspectRatio() {
+        return graphic.getWidth() / (double) graphic.getHeight();
     }
 
     private File requirePNGorJPEG(File file) throws IOException {

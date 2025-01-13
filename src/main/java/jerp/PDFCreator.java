@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static jerp.Layout.DOCUMENT_WIDTH_IN_POINTS;
+
 public class PDFCreator {
     public static File createFrom(BusinessLetterDIN5008 letter,
                                      String path) throws IOException {
@@ -23,21 +25,35 @@ public class PDFCreator {
 
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                 Layout layout = letter.getLayout();
+                Letterhead letterhead = letter.getLetterhead();
 
-                if (letter.getLetterhead() != null) {
-                    BufferedImage bufferedImage = letter.getLetterhead().getContent();
-                    int originalWidth = bufferedImage.getWidth();
-                    int originalHeight = bufferedImage.getHeight();
-                    double ratio = (double) originalWidth / originalHeight;
-                    float computedHeight = layout.getLetterheadHeightInPoints();
-                    float computedWidth = (float) (computedHeight * ratio);
+                if (letterhead != null) {
+                    float height = layout.getLetterheadHeightInPoints();
+                    float width = (float) (height * letterhead.getAspectRatio());
+                    // TODO: check if graphics width fits in
+
+                    float leftEnd = layout.getLetterheadX() - (width / 2);
+                    float rightEnd = layout.getLetterheadX() + (width / 2);
+                    float x = layout.getLetterheadX() - (width /2);
+
+                    if (x < DOCUMENT_WIDTH_IN_POINTS / 2) {
+                        if (leftEnd < 0) {
+                            x = 0F;
+                        }
+                    } else {
+                        if (rightEnd > DOCUMENT_WIDTH_IN_POINTS) {
+                            x = DOCUMENT_WIDTH_IN_POINTS - width;
+                        }
+                    }
+
+                    BufferedImage bufferedImage = letterhead.getGraphic();
                     PDImageXObject image  = LosslessFactory.createFromImage(document, bufferedImage);
                     contentStream.drawImage(
                             image,
-                            layout.getLetterheadX(),
+                            x,
                             layout.getLetterheadY(),
-                            computedWidth,
-                            computedHeight
+                            width,
+                            height
                     );
                 }
             }

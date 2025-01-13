@@ -1,8 +1,8 @@
 package jerp;
 
 public class Layout {
-    private static final float DOCUMENT_WIDTH_IN_POINTS = 595.27563F;
-    private static final float DOCUMENT_HEIGHT_IN_POINTS = 841.8898F;
+    public static final float DOCUMENT_WIDTH_IN_POINTS = 595.27563F;
+    public static final float DOCUMENT_HEIGHT_IN_POINTS = 841.8898F;
 
     private float letterheadX;
     private float letterheadY;
@@ -47,6 +47,17 @@ public class Layout {
 
     public float getLetterheadHeightInPoints() {
         return letterheadHeightInPoints;
+    }
+
+    public void setLetterheadAlignment(String alignment) {
+        letterheadX = switch (alignment) {
+            case "center-left" -> (float) DOCUMENT_WIDTH_IN_POINTS / 4;
+            case "center" -> (float) DOCUMENT_WIDTH_IN_POINTS / 2;
+            case "center-right" -> (float) DOCUMENT_WIDTH_IN_POINTS * 3 / 4;
+            case "right" -> (float) DOCUMENT_WIDTH_IN_POINTS;
+            default -> 0F;
+        };
+
     }
 
 }
