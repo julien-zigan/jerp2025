@@ -11,10 +11,12 @@ import java.util.Objects;
 public class Letterhead {
     private final BufferedImage content;
 
+    // TODO: implement alignment (left, left-center, gticenter, right-center, right)
+    // TODO: push to github
+
     public Letterhead(String imagePath)
             throws IOException, IllegalArgumentException {
-        File file = new File(imagePath);
-        requirePNGorJPEG(file);
+        File file = requirePNGorJPEG(new File(imagePath));
         content = ImageIO.read(file);
     }
 
@@ -22,12 +24,14 @@ public class Letterhead {
         return content;
     }
 
-    private void requirePNGorJPEG(File file) throws IOException {
+    private File requirePNGorJPEG(File file) throws IOException {
         Path path = file.toPath();
         String contentType = Files.probeContentType(path);
         boolean isPNG = Objects.equals(contentType, "image/png");
         boolean isJPEG = Objects.equals(contentType, "image/jpeg");
-        if (!isPNG && !isJPEG) {
+        if (isPNG || isJPEG) {
+            return file;
+        } else {
             throw new IllegalArgumentException(contentType + " is not supported");
         }
     }

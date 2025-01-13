@@ -24,7 +24,7 @@ class LetterheadTest {
     @ValueSource(strings = {
             "src/test/resources/mockLetterheads/letterhead_svg.svg",
             "src/test/resources/mockLetterheads/letterhead_svg2.svg",
-            "src/test/resources/wrongInputFiles/tryPDFasInput.pdf"
+            "src/test/resources/wrongInputFiles/tryPDFasInput.pdf",
     })
     void mustThrowIllegalArgumentException(String path) {
         assertThrows(IllegalArgumentException.class, () -> {new Letterhead(path);});
