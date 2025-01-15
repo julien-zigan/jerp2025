@@ -47,7 +47,7 @@ public class PDFCreator {
                     float leftEnd = layout.getLetterheadX() - (width / 2);
                     float rightEnd = layout.getLetterheadX() + (width / 2);
                     float x = layout.getLetterheadX() - (width /2);
-                    /// Should take other branch
+
                     if (layout.getLetterheadX() < DOCUMENT_WIDTH_IN_POINTS / 2) {
                         if (leftEnd < 0) {
                             x = 0F;
