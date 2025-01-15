@@ -13,6 +13,4 @@ class VisualTestCleanUp {
             file.delete();
         }
     }
-
-
 }
