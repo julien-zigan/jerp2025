@@ -14,16 +14,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class VisualTest {
+    /// Test in this class opens File in PDFReader, don't run with regular tests
 
-    /// Opens File in PDFReader, comment out during regular tests
     @Test
-    // Opens the PDFFile on the host system for visual proof
     void shouldCreateBlankDINA4PdfFileWithTemplateOverlay() throws Exception {
         String uuid = UUID.randomUUID().toString();
         BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
@@ -37,7 +33,6 @@ class VisualTest {
         Desktop.getDesktop().open(overlayedOnTemplate);
     }
 
-    /// Opens File in PDFReader, comment out during regular tests @ParameterizedTest
     @ParameterizedTest
     @ValueSource(strings = {
             "src/test/resources/mockLetterheads/letterhead_wood.jpg",
@@ -60,7 +55,6 @@ class VisualTest {
         Desktop.getDesktop().open(overlayedOnTemplate);
     }
 
-    /// Opens File in PDFReader, comment out during regular tests @ParameterizedTest
     @ParameterizedTest
     @ValueSource(strings = {
             "src/test/resources/mockLetterheads/letterhead_wood.jpg",
@@ -69,18 +63,16 @@ class VisualTest {
             "src/test/resources/mockLetterheads/lettehead_coffee.png"
     })
     void shouldPrintLetterHead(String imagePath) throws Exception {
-        Layout[] layouts = {Layout.TypeA(), Layout.TypeB()};
-        File templateTypeA = new File("src/test/resources/DIN_5008_Templates/DIN_5008_Form_A.pdf");
-        File templateTypeB = new File("src/test/resources/DIN_5008_Templates/DIN_5008_Form_B.pdf");
+        LayoutType[] layouts = {new LayoutTypeA(), new LayoutTypeB()};
 
-        for (Layout layout : layouts) {
-            BusinessLetterDIN5008 letter = setUpLetterWithLetterHead(layout, imagePath);
+        for (LayoutType layout  : layouts) {
+            BusinessLetterDIN5008 letter = setUpLetterWithLetterHead(layout.getLayout(), imagePath);
             String uuid = UUID.randomUUID().toString();
 
             File shouldHaveLetterHead = PDFCreator.createFrom(letter, uuid);
+            shouldHaveLetterHead.deleteOnExit();
 
-            // TODO figure out how to determine correct template
-            File overlayedOnTemplate = overlay(templateLayout, shouldHaveLetterHead);
+            File overlayedOnTemplate = overlay(layout.getTemplate(), shouldHaveLetterHead);
             Desktop.getDesktop().open(overlayedOnTemplate);
         }
     }
@@ -178,5 +170,42 @@ class VisualTest {
         File shouldHaveLetterHead = PDFCreator.createFrom(letter, fqn);
 
         Desktop.getDesktop().open(shouldHaveLetterHead);
+    }
+
+    private class LayoutType {
+        private final Layout layout;
+        private final File template;
+
+        public LayoutType(Layout layout, File template) {
+            this.layout = layout;
+            this.template = template;
+        }
+
+        public Layout getLayout() {
+            return layout;
+        }
+
+        public File getTemplate() {
+            return template;
+        }
+
+    }
+
+    private class LayoutTypeA extends LayoutType {
+        public LayoutTypeA() {
+            super(
+                    Layout.TypeA(),
+                    new File("src/test/resources/DIN_5008_Templates/DIN_5008_Form_A.pdf")
+            );
+        }
+    }
+
+    private class LayoutTypeB extends LayoutType {
+        public LayoutTypeB() {
+            super(
+                    Layout.TypeB(),
+                    new File("src/test/resources/DIN_5008_Templates/DIN_5008_Form_B.pdf")
+            );
+        }
     }
 }
