@@ -3,6 +3,7 @@ package jerp;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.multipdf.Overlay;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -16,8 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Disabled
 class VisualTest {
-    /// Test in this class opens File in PDFReader, don't run with regular tests
+    /// Tests in this class opens File in PDFReader, don't run with regular tests
 
     @Test
     void shouldCreateBlankDINA4PdfFileWithTemplateOverlay() throws Exception {
