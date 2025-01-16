@@ -40,28 +40,6 @@ class VisualTest {
             "src/test/resources/mockLetterheads/letterhead_wood.png",
             "src/test/resources/mockLetterheads/lettehead_coffee.png"
     })
-    void shouldPrintLetterHead_TYPE_A(String imagePath) throws Exception {
-        BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
-        Layout layout = Layout.TypeA();
-        letter.setLayout(layout);
-        Letterhead letterhead = new Letterhead(imagePath);
-        letter.setLetterhead(letterhead);
-        String uuid = UUID.randomUUID().toString();
-
-        File shouldHaveLetterHead = PDFCreator.createFrom(letter, uuid);
-
-        File templateLayout = new File("src/test/resources/DIN_5008_Templates/DIN_5008_Form_A.pdf");
-        File overlayedOnTemplate = overlay(templateLayout, shouldHaveLetterHead);
-        Desktop.getDesktop().open(overlayedOnTemplate);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "src/test/resources/mockLetterheads/letterhead_wood.jpg",
-            "src/test/resources/mockLetterheads/letterhead_quillpen.jpg",
-            "src/test/resources/mockLetterheads/letterhead_wood.png",
-            "src/test/resources/mockLetterheads/lettehead_coffee.png"
-    })
     void shouldPrintLetterHead(String imagePath) throws Exception {
         LayoutType[] layouts = {new LayoutTypeA(), new LayoutTypeB()};
 
@@ -75,6 +53,60 @@ class VisualTest {
             File overlayedOnTemplate = overlay(layout.getTemplate(), shouldHaveLetterHead);
             Desktop.getDesktop().open(overlayedOnTemplate);
         }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "left",
+            "center-left",
+            "center",
+            "center-right",
+            "right",
+            "", "+ßÄÜö2§$%"
+    })
+    void shouldAlignLetterHead(String alignment) throws Exception {
+        LayoutType[] layouts = {new LayoutTypeA(), new LayoutTypeB()};
+        String imagePath = "src/test/resources/mockLetterheads/letterhead_quillpen.jpg";
+
+        for (LayoutType layout  : layouts) {
+            layout.getLayout().setLetterheadAlignment(alignment);
+            BusinessLetterDIN5008 letter = setUpLetterWithLetterHead(layout.getLayout(), imagePath);
+            String uuid = UUID.randomUUID().toString();
+
+            File shouldHaveLetterHead = PDFCreator.createFrom(letter, uuid);
+            shouldHaveLetterHead.deleteOnExit();
+
+            File overlayedOnTemplate = overlay(layout.getTemplate(), shouldHaveLetterHead);
+            Desktop.getDesktop().open(overlayedOnTemplate);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "left",
+            "center-left",
+            "center",
+            "center-right",
+            "right",
+            "", "+ßÄÜö2§$%"
+    })
+    void shouldAdjustHeightAndWidthLetterHead(String alignment) throws Exception {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd_H.mm");
+        String dateExtension = LocalDateTime.now().format(formatter);
+        String path = "src\\test\\resources\\tmpTestOutput\\TestLetterheadAlignment_";
+        UUID uuid = UUID.randomUUID();
+        String fqn = path + dateExtension + uuid;
+
+        BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
+        Layout layout = Layout.TypeB();
+        layout.setLetterheadAlignment(alignment);
+        letter.setLayout(layout);
+        Letterhead letterhead = new Letterhead(
+                "src/test/resources/mockLetterheads/letterhead_ultrawide.jpg");
+        letter.setLetterhead(letterhead);
+        File shouldHaveLetterHead = PDFCreator.createFrom(letter, fqn);
+
+        Desktop.getDesktop().open(shouldHaveLetterHead);
     }
 
     private BusinessLetterDIN5008 setUpLetterWithLetterHead(Layout layout, String imagePath) throws Exception {
@@ -112,66 +144,6 @@ class VisualTest {
                 .getMethodName();
     }
 
-    /// Opens File in PDFReader, comment out during regular tests
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "left",
-            "center-left",
-            "center",
-            "center-right",
-            "right",
-            "", "+ßÄÜö2§$%"
-    })
-    void shouldAlignLetterHead(String alignment) throws Exception {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd_H.mm");
-        String dateExtension = LocalDateTime.now().format(formatter);
-        String path = "src\\test\\resources\\tmpTestOutput\\TestLetterheadAlignment_";
-        UUID uuid = UUID.randomUUID();
-        String fqn = path + dateExtension + uuid;
-
-        BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
-        Layout layout = Layout.TypeB();
-        layout.setLetterheadAlignment(alignment);
-        letter.setLayout(layout);
-        Letterhead letterhead = new Letterhead(
-                "src/test/resources/mockLetterheads/letterhead_quillpen.jpg");
-        letter.setLetterhead(letterhead);
-        File shouldHaveLetterHead = PDFCreator.createFrom(letter, fqn);
-
-
-
-        Desktop.getDesktop().open(shouldHaveLetterHead);
-    }
-
-    /// Opens File in PDFReader, comment out during regular tests
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "left",
-            "center-left",
-            "center",
-            "center-right",
-            "right",
-            "", "+ßÄÜö2§$%"
-    })
-    void shouldAdjustHeightAndWidthLetterHead(String alignment) throws Exception {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd_H.mm");
-        String dateExtension = LocalDateTime.now().format(formatter);
-        String path = "src\\test\\resources\\tmpTestOutput\\TestLetterheadAlignment_";
-        UUID uuid = UUID.randomUUID();
-        String fqn = path + dateExtension + uuid;
-
-        BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
-        Layout layout = Layout.TypeB();
-        layout.setLetterheadAlignment(alignment);
-        letter.setLayout(layout);
-        Letterhead letterhead = new Letterhead(
-                "src/test/resources/mockLetterheads/letterhead_ultrawide.jpg");
-        letter.setLetterhead(letterhead);
-        File shouldHaveLetterHead = PDFCreator.createFrom(letter, fqn);
-
-        Desktop.getDesktop().open(shouldHaveLetterHead);
-    }
-
     private class LayoutType {
         private final Layout layout;
         private final File template;
@@ -188,7 +160,6 @@ class VisualTest {
         public File getTemplate() {
             return template;
         }
-
     }
 
     private class LayoutTypeA extends LayoutType {
