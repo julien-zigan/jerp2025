@@ -13,9 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.List;
 
 @Disabled
 class VisualTest {
@@ -57,58 +56,46 @@ class VisualTest {
         }
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "left",
-            "center-left",
-            "center",
-            "center-right",
-            "right",
-            "", "+ßÄÜö2§$%"
-    })
-    void shouldAlignLetterHead(String alignment) throws Exception {
+    @Test
+    void shouldAlignLetterHead() throws Exception {
         LayoutType[] layouts = {new LayoutTypeA(), new LayoutTypeB()};
         String imagePath = "src/test/resources/mockLetterheads/letterhead_quillpen.jpg";
 
-        for (LayoutType layout  : layouts) {
-            layout.getLayout().setLetterheadAlignment(alignment);
-            BusinessLetterDIN5008 letter = setUpLetterWithLetterHead(layout.getLayout(), imagePath);
-            String uuid = UUID.randomUUID().toString();
+        for (Alignment alignment : Alignment.values()) {
+            for (LayoutType layout : layouts) {
+                layout.getLayout().setLetterheadAlignment(alignment);
+                BusinessLetterDIN5008 letter = setUpLetterWithLetterHead(layout.getLayout(), imagePath);
+                String uuid = UUID.randomUUID().toString();
 
-            File shouldHaveLetterHead = PDFCreator.createFrom(letter, uuid);
-            shouldHaveLetterHead.deleteOnExit();
+                File shouldHaveLetterHead = PDFCreator.createFrom(letter, uuid);
+                shouldHaveLetterHead.deleteOnExit();
 
-            File overlayedOnTemplate = overlay(layout.getTemplate(), shouldHaveLetterHead);
-            Desktop.getDesktop().open(overlayedOnTemplate);
+                File overlayedOnTemplate = overlay(layout.getTemplate(), shouldHaveLetterHead);
+                Desktop.getDesktop().open(overlayedOnTemplate);
+            }
         }
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "left",
-            "center-left",
-            "center",
-            "center-right",
-            "right",
-            "", "+ßÄÜö2§$%"
-    })
-    void shouldAdjustHeightAndWidthLetterHead(String alignment) throws Exception {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd_H.mm");
-        String dateExtension = LocalDateTime.now().format(formatter);
-        String path = "src\\test\\resources\\tmpTestOutput\\TestLetterheadAlignment_";
-        UUID uuid = UUID.randomUUID();
-        String fqn = path + dateExtension + uuid;
+    @Test
+        void shouldAdjustHeightAndWidthLetterHead() throws Exception {
+            for (Alignment alignment : Alignment.values()) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd_H.mm");
+                String dateExtension = LocalDateTime.now().format(formatter);
+                String path = "src\\test\\resources\\tmpTestOutput\\TestLetterheadAlignment_";
+                UUID uuid = UUID.randomUUID();
+                String fqn = path + dateExtension + uuid;
 
-        BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
-        Layout layout = Layout.TypeB();
-        layout.setLetterheadAlignment(alignment);
-        letter.setLayout(layout);
-        Letterhead letterhead = new Letterhead(
-                "src/test/resources/mockLetterheads/letterhead_ultrawide.jpg");
-        letter.setLetterhead(letterhead);
-        File shouldHaveLetterHead = PDFCreator.createFrom(letter, fqn);
+                BusinessLetterDIN5008 letter = new BusinessLetterDIN5008();
+                Layout layout = Layout.TypeB();
+                layout.setLetterheadAlignment(alignment);
+                letter.setLayout(layout);
+                Letterhead letterhead = new Letterhead(
+                        "src/test/resources/mockLetterheads/letterhead_ultrawide.jpg");
+                letter.setLetterhead(letterhead);
+                File shouldHaveLetterHead = PDFCreator.createFrom(letter, fqn);
 
-        Desktop.getDesktop().open(shouldHaveLetterHead);
+                Desktop.getDesktop().open(shouldHaveLetterHead);
+            }
     }
 
     private BusinessLetterDIN5008 setUpLetterWithLetterHead(Layout layout, String imagePath) throws Exception {

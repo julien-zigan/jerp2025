@@ -4,12 +4,16 @@ public class Layout {
     public static final float DOCUMENT_WIDTH_IN_POINTS = 595.27563F;
     public static final float DOCUMENT_HEIGHT_IN_POINTS = 841.8898F;
 
+    private String type;
+
+    private Alignment alignment = Alignment.LEFT;
     private float letterheadX;
     private float letterheadY;
     private float letterheadWidthInPoints;
     private float letterheadHeightInPoints;
 
     private Layout(
+            String type,
             float letterheadWidthInPoints,
             float letterheadHeightInPoints
     ) {
@@ -21,6 +25,7 @@ public class Layout {
 
     public static Layout TypeA() {
         return new Layout(
+                "Type A",
                 DOCUMENT_WIDTH_IN_POINTS,
                 76.5354F
         );
@@ -28,9 +33,14 @@ public class Layout {
 
     public static Layout TypeB() {
         return new Layout(
+                "Type B",
                 DOCUMENT_WIDTH_IN_POINTS,
                 127.559F
         );
+    }
+
+    public String getType() {
+        return type;
     }
 
     public float getLetterheadX() {
@@ -49,13 +59,21 @@ public class Layout {
         return letterheadHeightInPoints;
     }
 
-    public void setLetterheadAlignment(String alignment) {
+    @Override
+    public String toString() {
+        return "Layout [type=" + type + ", letterheadX=" + letterheadX + ", letterheadY="
+                + letterheadY + ", letterheadWidthInPoints=" + letterheadWidthInPoints
+                + ", letterheadHeightInPoints=" + letterheadHeightInPoints + "]";
+    }
+
+    public void setLetterheadAlignment(Alignment alignment) {
+        this.alignment = alignment;
         letterheadX = switch (alignment) {
-            case "center-left" -> (float) DOCUMENT_WIDTH_IN_POINTS / 4;
-            case "center" -> (float) DOCUMENT_WIDTH_IN_POINTS / 2;
-            case "center-right" -> (float) DOCUMENT_WIDTH_IN_POINTS * 3 / 4;
-            case "right" -> (float) DOCUMENT_WIDTH_IN_POINTS;
-            default -> 0F;
+            case LEFT -> 0F;
+            case CENTER_LEFT -> (float) DOCUMENT_WIDTH_IN_POINTS / 4;
+            case CENTER -> (float) DOCUMENT_WIDTH_IN_POINTS / 2;
+            case CENTER_RIGHT -> (float) DOCUMENT_WIDTH_IN_POINTS * 3 / 4;
+            case RIGHT -> (float) DOCUMENT_WIDTH_IN_POINTS;
         };
 
     }
