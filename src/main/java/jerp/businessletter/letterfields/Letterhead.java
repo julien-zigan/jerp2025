@@ -21,33 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package jerp;
+package jerp.businessletter.letterfields;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
 
-public class BusinessLetterDIN5008 {
-    private Layout layout;
-    private Letterhead letterhead;
+public class Letterhead {
+    private final BufferedImage graphic;
 
-    public Layout getLayout() {
-        return layout;
+    public Letterhead(String imagePath)
+            throws IOException, IllegalArgumentException {
+        File file = requirePNGorJPEG(new File(imagePath));
+        graphic = ImageIO.read(file);
     }
 
-    public void setLayout(Layout layout) {
-        this.layout = layout;
+    public BufferedImage getGraphic() {
+        return graphic;
     }
 
-    public Letterhead getLetterhead() {
-        return letterhead;
+    public int getWidth() {
+        return graphic.getWidth();
     }
 
-    public void setLetterhead(Letterhead letterhead) {
-        this.letterhead = letterhead;
+    public int getHeight() {
+        return graphic.getHeight();
     }
 
-    public File saveAsPDF(String path) throws IOException {
-        return PDFCreator.createFrom(this, path);
+    public double getAspectRatio() {
+        return graphic.getWidth() / (double) graphic.getHeight();
     }
 
+    private File requirePNGorJPEG(File file) throws IOException {
+        Path path = file.toPath();
+        String contentType = Files.probeContentType(path);
+        boolean isPNG = Objects.equals(contentType, "image/png");
+        boolean isJPEG = Objects.equals(contentType, "image/jpeg");
+        if (isPNG || isJPEG) {
+            return file;
+        } else {
+            throw new IllegalArgumentException(contentType + " is not supported");
+        }
+    }
 }

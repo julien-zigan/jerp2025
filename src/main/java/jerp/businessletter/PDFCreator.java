@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package jerp;
+package jerp.businessletter;
 
+import jerp.businessletter.letterfields.Letterhead;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -34,12 +35,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import static jerp.Layout.DOCUMENT_HEIGHT_IN_POINTS;
-import static jerp.Layout.DOCUMENT_WIDTH_IN_POINTS;
+import static jerp.businessletter.Layout.DOCUMENT_HEIGHT_IN_POINTS;
+import static jerp.businessletter.Layout.DOCUMENT_WIDTH_IN_POINTS;
 
 public class PDFCreator {
     public static File createFrom(BusinessLetterDIN5008 letter,
-                                     String path) throws IOException {
+                                  String path) throws IOException {
         path = addFileExtension(path);
         File file = new File(path);
 

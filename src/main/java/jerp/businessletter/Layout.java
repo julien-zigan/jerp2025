@@ -21,7 +21,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
  */
-package jerp;
+package jerp.businessletter;
 
 /**
  * Provides size and positioning information of all letter regions.
