@@ -42,7 +42,7 @@ public class Layout {
 
     private String type;
 
-    private Alignment alignment = Alignment.LEFT;
+    private Alignment letterheadAlignment = Alignment.LEFT;
     private float letterheadX;
     private float letterheadY;
     private float letterheadWidthInPoints;
@@ -100,11 +100,11 @@ public class Layout {
         return "Layout [type=" + type + "\nletterheadX=" + letterheadX + "\nletterheadY="
                 + letterheadY + "\nletterheadWidthInPoints=" + letterheadWidthInPoints
                 + "\nletterheadHeightInPoints=" + letterheadHeightInPoints +
-                "\nletterhead alignmetn=" + alignment + "]";
+                "\nletterhead alignmetn=" + letterheadAlignment + "]";
     }
 
     public void setLetterheadAlignment(Alignment alignment) {
-        this.alignment = alignment;
+        this.letterheadAlignment = alignment;
         letterheadX = switch (alignment) {
             case LEFT -> 0F;
             case CENTER_LEFT -> (float) DOCUMENT_WIDTH_IN_POINTS / 4;
